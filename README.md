@@ -4,27 +4,27 @@
 
 ### Why is this running?
 Trace any process, port, container, or file back to the exact chain that started it —<br>
-one command, machine-readable JSON, or an [interactive TUI](#3-interactive-mode-tui).
-
-[![Latest Release](https://img.shields.io/github/v/release/pranshuparmar/witr?label=Latest%20Release&style=flat-square)](https://github.com/pranshuparmar/witr/releases/latest) [![Platforms](https://img.shields.io/badge/platforms-linux%20%7C%20macos%20%7C%20windows%20%7C%20freebsd-blue?style=flat-square)](#8-platform-support) <br> [![Package Managers](https://img.shields.io/badge/Package%20Managers-brew%20|%20conda%20|%20aur%20|%20winget%20|%20npm%20|%20ports%20|%20...%20-blue?style=flat-square)](https://repology.org/project/witr/versions)
-
-<a href="https://trendshift.io/repositories/18714" target="_blank"><img src="https://trendshift.io/api/badge/repositories/18714" alt="pranshuparmar/witr on Trendshift" width="250" height="55" /></a>
-<a href="https://www.producthunt.com/products/witr?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-witr" target="_blank" rel="noopener noreferrer"><img alt="witr - Why is this running? Trace process, port, container or file. | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1211309&amp;theme=light&amp;t=1785480480150"></a>
-
-### 🎮 [**Try witr in your browser →**](https://pranshuparmar.github.io/witr/)
-*Investigate a simulated Linux box — a guided tutorial and free-play sandbox, no install required.*
-
-<a href="https://pranshuparmar.github.io/witr/"><img width="1232" alt="witr's interactive TUI and CLI answering why a node process is running — the same systemd → PM2 → node chain in both" src="https://github.com/user-attachments/assets/dbe271ad-25e5-425b-b414-392d0c4eee37" /></a>
+one command, machine-readable JSON, [interactive TUI](#3-interactive-mode-tui), or [modern Web Dashboard](#31-interactive-web-dashboard-web-ui).
 
 </div>
+
+> [!NOTE]
+> **Fork Notice**: This repository is a fork of the upstream project [pranshuparmar/witr](https://github.com/pranshuparmar/witr).
+>
+> **Enhancements & Added Features in this Fork**:
+> - 🌐 **Interactive Web UI (`witr web`)**: Embedded lightweight HTTP server providing a real-time web dashboard.
+> - 🎨 **Design Tokens from [`native-ai-ui`](https://github.com/eanzhao-os/native-ai-ui)**: High-density data grid (`records-table`), responsive sidebar navigation (`sidebar-nav`), search palette with `/` hotkey, and automatic OS system theme following (`prefers-color-scheme`).
+> - 🌳 **Interactive Causal Chain Flow Tree**: Visual node-and-connector causality diagram tracing back from PID 1 to target process and children.
+> - ⚡ **Process Control & Safety Guard**: Send `SIGTERM`, `SIGKILL`, `SIGSTOP/SIGCONT`, and `Renice` with confirmation dialogs directly from the browser.
+> - 📑 **Comprehensive Technical & Architectural Report**: In-depth analysis and implementation details available under [`learn/`](./learn/README.md).
 
 ---
 
 <div align="center">
 
-[**Purpose**](#1-purpose) • [**Installation**](#2-installation) • [**TUI**](#3-interactive-mode-tui) • [**Flags**](#4-flags--options) • [**Core Concept**](#5-core-concept) • [**Examples**](#6-example-outputs)
+[**Purpose**](#1-purpose) • [**Installation**](#2-installation) • [**Web UI**](#31-interactive-web-dashboard-web-ui) • [**TUI**](#3-interactive-mode-tui) • [**Flags**](#4-flags--options) • [**Core Concept**](#5-core-concept)
 <br>
-[**Output Behavior**](#7-output-behavior) • [**Platforms**](#8-platform-support) • [**Success Criteria**](#9-success-criteria) • [**Sponsors**](#10-sponsors)
+[**Examples**](#6-example-outputs) • [**Output Behavior**](#7-output-behavior) • [**Platforms**](#8-platform-support) • [**Architecture Report**](./learn/README.md)
 
 </div>
 
@@ -528,7 +528,34 @@ Remove-Item -Recurse -Force "$env:LocalAppData\witr"
 
 ---
  
-## 3. Interactive Mode (TUI)
+## 3. Interactive Modes (Web & TUI)
+
+### 3.1 Interactive Web Dashboard (Web UI)
+
+Running `witr web` launches the built-in **Web Dashboard** on `http://127.0.0.1:7070` and automatically opens it in your default browser:
+
+```bash
+# Start Web UI on default port (http://127.0.0.1:7070)
+witr web
+
+# Start on custom port and open browser
+witr web --port 8080 --open
+
+# Bind to all network interfaces
+witr web --host 0.0.0.0 --port 7070 --open=false
+```
+
+#### Key Web UI Features:
+- **Design Tokens & Visual Quality**: Built with design tokens and styling from [`native-ai-ui`](https://github.com/eanzhao-os/native-ai-ui) (`tokens.css`, `records-table`, `sidebar-nav`, `search`).
+- **Real-Time OS Theme Following**: Automatically syncs with your system's Dark / Light mode in real-time (`prefers-color-scheme`), with support for manual cycling (Auto 🖥️ → Dark 🌙 → Light ☀️).
+- **Interactive Causal Chain Flow**: Visual node diagram tracing from init/supervisor down to target processes and child branches.
+- **4 Comprehensive Workspaces**: Processes, Ports, Containers, and File Locks with search, filter chips, and column sorting.
+- **Process Signals & Actions**: Safely send `SIGTERM`, `SIGKILL`, `SIGSTOP/SIGCONT`, or `Renice` with confirmation dialogs directly from the UI.
+- **Zero Dependencies**: Pure Go embedded web server with no external runtime, Node.js, or npm required at runtime.
+
+---
+
+### 3.2 Interactive Terminal Mode (TUI)
 
 Running `witr` without any arguments or with the `-i` flag launches the **Interactive Mode (TUI)**. This provides a real-time, terminal-based dashboard with four tabs for exploring processes, ports, containers, and file locks.
 
